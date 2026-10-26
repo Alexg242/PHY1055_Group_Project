@@ -1,0 +1,32 @@
+
+plt.figure(figsize=(9, 6))
+
+dH = (b - d)*H_grid - delta*I_grid
+dI = tau*I_grid*(H_grid - I_grid) - (delta + d)*I_grid
+
+rate = np.sqrt(dH**2 + dI**2)
+rate[rate == 0] = 1
+
+U = dH / rate
+V = dI / rate
+
+plt.quiver(H_grid, I_grid, U, V, rate, cmap="plasma", alpha=0.75)
+plt.plot(H, I_H_null, linewidth=2,
+         label="H-nullcline")
+plt.plot(H, I_I_null, linewidth=2,
+         label="I-nullcline")
+
+H_star = delta*(delta + d)/(tau*(delta - b + d))
+I_star = (b - d)*(delta + d)/(tau*(delta - b + d))
+
+plt.plot(H_star, I_star, "go", markersize=8,
+         label="Fixed Point")
+
+plt.xlim(0, 10)
+plt.ylim(0, 10)
+plt.xlabel("Healthy rabbits, H")
+plt.ylabel("Infected rabbits, I")
+plt.legend()
+
+plt.savefig(f"fixedpoint_b{b}_d{d}_tau{tau}_delta{delta}.png")
+plt.show()
